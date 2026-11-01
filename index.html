@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Comet ToDo is a calm, private to-do app for iPhone, iPad and Mac. Join the free TestFlight beta.">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<title>Comet ToDo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  /* Layout: a night sky like the app's, one centered column; hero pairs the pitch with the home screen, then app-style labeled sections. */
+  :root {
+    --bg: #05060C;
+    --panel: #0D1024;
+    --raised: #161A38;
+    --line: rgba(232, 230, 240, 0.10);
+    --fg: #E8E6F0;
+    --dim: #A4A2BA;
+    --sky: #7DD3FC;
+    --lavender: #C9A8F5;
+    --pink: #F4889A;
+    --gold: #E8C47F;
+    --periwinkle: #93A9E8;
+    --on-accent: #05060C;
+    --star: rgba(255, 255, 255, 0.75);
+    --shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --body: "Manrope", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #F4F3FA; --panel: #FFFFFF; --raised: #ECEAF5; --line: rgba(20, 21, 42, 0.09);
+      --fg: #14152A; --dim: #6B6984; --sky: #0B8FD1; --lavender: #8A63D2; --pink: #E0577A;
+      --gold: #B8862B; --periwinkle: #4F6BD8; --on-accent: #FFFFFF; --star: rgba(20, 21, 42, 0.16);
+      --shadow: 0 24px 60px rgba(40, 36, 90, 0.18);
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F3FA; --panel: #FFFFFF; --raised: #ECEAF5; --line: rgba(20, 21, 42, 0.09);
+    --fg: #14152A; --dim: #6B6984; --sky: #0B8FD1; --lavender: #8A63D2; --pink: #E0577A;
+    --gold: #B8862B; --periwinkle: #4F6BD8; --on-accent: #FFFFFF; --star: rgba(20, 21, 42, 0.16);
+    --shadow: 0 24px 60px rgba(40, 36, 90, 0.18);
+    color-scheme: light;
+  }
+
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  * { box-sizing: border-box; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 500 16px/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .sky {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 8% 12%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 23% 48%, var(--star), transparent 60%),
+      radial-gradient(1.5px 1.5px at 41% 8%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 57% 31%, var(--star), transparent 60%),
+      radial-gradient(2px 2px at 72% 14%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 86% 41%, var(--star), transparent 60%),
+      radial-gradient(1.5px 1.5px at 93% 77%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 64% 66%, var(--star), transparent 60%),
+      radial-gradient(1.5px 1.5px at 33% 83%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 12% 70%, var(--star), transparent 60%),
+      radial-gradient(1px 1px at 48% 58%, var(--star), transparent 60%),
+      radial-gradient(1.5px 1.5px at 79% 92%, var(--star), transparent 60%);
+  }
+  .wrap {
+    position: relative; z-index: 1;
+    max-width: 1040px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  a { color: var(--sky); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; border-radius: 6px; }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  /* The app's section headers: a centered monospaced label between two hairlines. */
+  .label {
+    display: flex; align-items: center; gap: 14px;
+    font: 500 12px/1 var(--mono); letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--sky);
+  }
+  .label::before, .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* Hero */
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center;
+    padding-block: 56px 40px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .brand img { width: 56px; height: 56px; border-radius: 13px; box-shadow: var(--shadow); }
+  .eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
+  h1 {
+    font-weight: 800; font-size: clamp(44px, 8vw, 84px); line-height: 0.98; letter-spacing: -0.025em;
+    background: linear-gradient(90deg, var(--sky), var(--lavender) 38%, var(--pink) 68%, var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-bottom: 0.06em;
+  }
+  .pitch { font-size: clamp(18px, 2.2vw, 21px); line-height: 1.5; color: var(--fg); max-width: 34ch; margin-top: 18px; }
+  .sub { color: var(--dim); max-width: 52ch; margin-top: 14px; }
+  .join { margin-top: 28px; display: grid; gap: 10px; max-width: 460px; }
+  .join-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .button {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 20px; border-radius: 999px; border: 0;
+    background: var(--lavender); color: var(--on-accent);
+    font: 700 16px/1 var(--body); text-decoration: none; cursor: pointer;
+  }
+  .button:hover { filter: brightness(1.08); }
+  .ghost {
+    background: transparent; color: var(--fg); border: 1px solid var(--line);
+    font-weight: 500;
+  }
+  .link-text { font: 500 13px/1.4 var(--mono); color: var(--dim); overflow-wrap: anywhere; user-select: all; }
+  .copied { font: 500 12px/1 var(--mono); color: var(--sky); letter-spacing: 0.08em; }
+
+  .phone {
+    width: 100%; max-width: 300px; justify-self: center;
+    border-radius: 34px; border: 1px solid var(--line); box-shadow: var(--shadow);
+    aspect-ratio: 395 / 860; object-fit: cover; background: var(--panel);
+  }
+
+  section { padding-block: 44px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .lede { color: var(--dim); max-width: 62ch; margin: -8px auto 0; text-align: center; }
+
+  /* Screens */
+  .screens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  figure { margin: 0; display: grid; gap: 12px; justify-items: center; }
+  figure img { max-width: 240px; width: 100%; border-radius: 28px; border: 1px solid var(--line); box-shadow: var(--shadow); aspect-ratio: 395 / 860; }
+  figcaption { color: var(--dim); font-size: 14px; text-align: center; max-width: 30ch; }
+
+  /* Why */
+  .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px 28px; }
+  .why div { display: grid; gap: 6px; padding-block: 14px; border-top: 1px solid var(--line); min-width: 0; }
+  .why h3 { font-size: 20px; font-weight: 600; }
+  .why p { color: var(--dim); }
+
+  /* Get it */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0;
+  }
+  .card h3 { font-size: 19px; font-weight: 600; }
+  .card ol, .card ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--dim); }
+  .card li::marker { color: var(--lavender); font-family: var(--mono); }
+  .card strong { color: var(--fg); font-weight: 700; }
+
+  /* Quick add: what you type, and the chips the app shows */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  th, td { text-align: left; padding: 14px 18px; border-top: 1px solid var(--line); vertical-align: top; }
+  thead th { border-top: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+  td:first-child { font: 500 14px/1.5 var(--mono); color: var(--fg); white-space: nowrap; }
+  .chip {
+    display: inline-block; margin: 2px 6px 2px 0; padding: 4px 10px; border-radius: 999px;
+    font: 700 13px/1.3 var(--body); background: var(--raised);
+  }
+  .chip.date { color: var(--sky); }
+  .chip.repeat { color: var(--gold); }
+  .chip.urgent { color: var(--pink); }
+  .chip.alarm { color: var(--lavender); }
+  .chip.list { color: var(--periwinkle); }
+
+  /* Features */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .feature h3 { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .feature p { color: var(--dim); }
+
+  /* Patch notes */
+  .notes { display: grid; gap: 18px; max-width: 760px; width: 100%; margin: 0 auto; }
+  .release { border: 1px solid var(--line); border-radius: 18px; background: var(--panel); padding: 24px; display: grid; gap: 16px; min-width: 0; }
+  .release header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+  .release h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .build { font: 500 12px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
+  .release h4 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .release ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; color: var(--dim); }
+  .release li strong { color: var(--fg); font-weight: 700; }
+  .group { display: grid; gap: 10px; }
+  .latest { color: var(--on-accent); background: var(--sky); padding: 3px 9px; border-radius: 999px; font: 500 11px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
+
+  .privacy { max-width: 760px; margin: 0 auto; text-align: center; display: grid; gap: 12px; }
+  .privacy p { color: var(--dim); }
+  footer { padding-block: 32px 56px; text-align: center; color: var(--dim); font-size: 14px; display: grid; gap: 6px; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 36px 24px; }
+    .phone { max-width: 250px; }
+    .screens { grid-template-columns: repeat(3, minmax(200px, 1fr)); overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+    .screens figure { scroll-snap-align: center; }
+    .release { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="brand">
+        <img src="icon.png" alt="The Comet ToDo icon: a white check mark in a rainbow ring on a starry sky">
+        <span class="eyebrow">Free beta · iPhone, iPad and Mac</span>
+      </div>
+      <h1>Comet ToDo</h1>
+      <p class="pitch">A calm, private to-do app with a night-sky look.</p>
+      <p class="sub">It shows what matters today, keeps you from losing anything by accident, and uses Apple Intelligence only where it saves you typing.</p>
+      <div class="join">
+        <div class="join-row">
+          <a class="button" href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">Join the beta on TestFlight</a>
+          <button class="button ghost" id="copy-link" type="button">Copy link</button>
+          <span class="copied" id="copied" hidden>Copied</span>
+        </div>
+        <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
+      </div>
+    </div>
+    <img class="phone" src="screenshots/home.png" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
+  </header>
+
+  <section aria-labelledby="look">
+    <h2 class="label" id="look">A closer look</h2>
+    <div class="screens">
+      <figure>
+        <img src="screenshots/suggestion.png" alt="A new task with a bill photo attached and a suggested title, Pay electricity bill, with the amount and due date" loading="lazy">
+        <figcaption>Attach a bill and it suggests the title, a note and the due date.</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/attachments.png" alt="Task cards, one with its attached bill photo shown as a small thumbnail" loading="lazy">
+        <figcaption>Photos and PDFs show right on the task's card.</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/calendar.png" alt="The calendar tab: a month grid with dots on busy days and today's tasks below" loading="lazy">
+        <figcaption>A calendar you can drag tasks around on.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="why">
+    <h2 class="label" id="why">Why Comet ToDo</h2>
+    <div class="why">
+      <div><h3>It gets to the point</h3><p>Open it and today is right there: what's overdue, what's due, and a ring showing how much is left.</p></div>
+      <div><h3>It's hard to lose things</h3><p>A swipe archives instead of deleting, and the Archive works like a Trash you can restore from.</p></div>
+      <div><h3>It stays lean</h3><p>One "this matters" marker (Urgent), not flags plus priorities plus stars.</p></div>
+      <div><h3>It's private</h3><p>No account, no servers, no tracking. Your tasks stay on your device.</p></div>
+      <div><h3>It's smart without taking over</h3><p>Quick add reads dates as you type, and it always shows what it understood before anything changes.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="get">
+    <h2 class="label" id="get">Getting it</h2>
+    <div class="steps">
+      <div class="card">
+        <h3>Install</h3>
+        <ol>
+          <li>Get Apple's free <strong>TestFlight</strong> app from the App Store.</li>
+          <li>Open the <a href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">beta link</a> on your iPhone, iPad or Mac.</li>
+          <li>Tap <strong>Accept</strong>, then <strong>Install</strong>.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Update</h3>
+        <ol>
+          <li>Open <strong>TestFlight</strong> and tap <strong>Comet ToDo</strong>.</li>
+          <li>Tap <strong>Update</strong>. Or turn on <strong>Automatic Updates</strong> there and never think about it.</li>
+        </ol>
+        <p style="color: var(--dim)">Your tasks stay put when you update.</p>
+      </div>
+      <div class="card">
+        <h3>What you need</h3>
+        <ul>
+          <li>iPhone or iPad on <strong>iOS 27</strong>, or a <strong>Mac with Apple silicon</strong> on macOS 27.</li>
+          <li>Apple Intelligence for the smart extras. Everything else works without it.</li>
+          <li>On a Mac, alarms arrive as notifications.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="quick">
+    <h2 class="label" id="quick">Type it like you'd say it</h2>
+    <p class="lede">Write the task in plain words. Chips under the title show what Comet ToDo understood; tap one to keep those words as text instead.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">You type</th><th scope="col">You get</th></tr></thead>
+        <tbody>
+          <tr><td>Call mom Friday 6pm</td><td><span class="chip date">Friday, 6:00 PM</span></td></tr>
+          <tr><td>Gym every Mon and Wed 7am</td><td><span class="chip date">Next Mon or Wed, 7:00 AM</span><span class="chip repeat">Weekly on Mon, Wed</span></td></tr>
+          <tr><td>Water plants every other day</td><td><span class="chip repeat">Every 2 days</span></td></tr>
+          <tr><td>Renew passport !urgent</td><td><span class="chip urgent">Urgent</span></td></tr>
+          <tr><td>Dentist Tuesday 9am alarm</td><td><span class="chip date">Tuesday, 9:00 AM</span><span class="chip alarm">Alarm</span></td></tr>
+          <tr><td>Send invoice #Work</td><td><span class="chip list">Work list</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="features">
+    <h2 class="label" id="features">Everything it does</h2>
+    <div class="features">
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--sky)"></span>Your day at a glance</h3>
+        <p>A greeting (with your name, if you add it), a one-line summary, and a progress ring. Filters for All, Today, Upcoming, Someday, Urgent and each of your lists.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--lavender)"></span>Reminders and alarms</h3>
+        <p>A notification at the due time or earlier, with Complete and Snooze buttons. Turn on Alarm for things you can't miss: it rings full screen, even on silent, with the tone you pick.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--gold)"></span>Repeats</h3>
+        <p>Daily, weekly on the days you pick, or monthly. Complete one and the next appears. The 31st stays the 31st, and times survive daylight saving.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--pink)"></span>Urgent</h3>
+        <p>Swipe right or type <span style="font-family: var(--mono)">!</span>. An urgent task with no date counts as today's until it's done, and never turns "overdue".</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--periwinkle)"></span>Notes and attachments</h3>
+        <p>Formatted notes with lists and headings. Add photos, PDFs and files, see them full screen, and let Apple Intelligence suggest a title from a bill, a receipt or a screenshot.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--sky)"></span>Lists and checklists</h3>
+        <p>Lists with their own color and icon; press and hold one to edit or delete it. A checklist is for plain items like groceries: type, press Return, type the next one.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--lavender)"></span>Calendar and search</h3>
+        <p>Month and week views; drag a task to another day. Your calendar events can show alongside (read only). Search covers titles, notes and the Archive.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--gold)"></span>Archive, with undo built in</h3>
+        <p>Finished tasks move to the Archive on their own, grouped by week. Restore anything with one tap. Deleting for good only happens there.</p>
+      </div>
+      <div class="card feature">
+        <h3><span class="dot" style="background: var(--pink)"></span>Widgets and accessibility</h3>
+        <p>A Today widget for the Home Screen and Lock Screen. Works at every text size, in landscape, and with VoiceOver.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="new">
+    <h2 class="label" id="new">What's new</h2>
+    <div class="notes">
+      <article class="release">
+        <header>
+          <h3>1.2 <span class="latest">Latest</span></h3>
+          <span class="build">Build 4 · November 2026</span>
+        </header>
+        <p style="color: var(--dim)">Most of this came from the first friends trying the app. Thank you!</p>
+        <div class="group">
+          <h4>New</h4>
+          <ul>
+            <li><strong>About button.</strong> The ⓘ next to Show Completed opens this page. After an update it shows a dot until you've had a look.</li>
+            <li><strong>Alarm sounds.</strong> Pick Comet, Orbit or Starlight in Settings, or keep iOS's standard alarm. Tap a tone to hear it.</li>
+            <li><strong>Press and hold a list's chip</strong> to edit or delete that list.</li>
+            <li><strong>A one-time tip explains swiping:</strong> right to mark Urgent, left to archive (and archived tasks can be restored).</li>
+          </ul>
+        </div>
+        <div class="group">
+          <h4>Fixes</h4>
+          <ul>
+            <li><strong>No more made-up suggestions for photos.</strong> Suggestions come only from pictures with words in them, like bills, receipts and screenshots.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <header>
+          <h3>1.1</h3>
+          <span class="build">Build 3 · November 2026</span>
+        </header>
+        <div class="group">
+          <h4>Fixes</h4>
+          <ul>
+            <li><strong>Repeating tasks keep your changes.</strong> Un-completing or restoring a task no longer deletes a next copy you've edited.</li>
+            <li><strong>The Urgent swipe changes only Urgent.</strong> It no longer turns the alarm on too.</li>
+            <li><strong>Early reminders say the day,</strong> like "Due tomorrow, 6:00 PM".</li>
+            <li><strong>Late-night times stay on today.</strong> Turning on Time after 11 PM picks 11:59 PM, not midnight.</li>
+            <li><strong>The checklist warning counts only unfinished tasks.</strong></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h4>Quick add</h4>
+          <ul>
+            <li><strong>Short day names:</strong> "Gym every Mon and Wed 7am", "Yoga every sat".</li>
+            <li><strong>A repeat starts on one of its days:</strong> "every weekday at 9am" typed on a Sunday starts Monday.</li>
+          </ul>
+        </div>
+        <div class="group">
+          <h4>Notifications and Mac</h4>
+          <ul>
+            <li><strong>If notifications are off,</strong> a task's details say it won't remind you.</li>
+            <li><strong>Runs on Apple silicon Macs.</strong> Alarms can't ring there, so a task with Alarm on gives you a notification instead.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <header>
+          <h3>1.0</h3>
+          <span class="build">Build 2 · October 30, 2026</span>
+        </header>
+        <ul>
+          <li><strong>Remove takes the attachment you picked</strong> (it used to always take the first).</li>
+          <li><strong>File tiles show the file's name.</strong></li>
+          <li><strong>Suggestions read whole PDF pages,</strong> can include a due date, and say so when there's nothing to suggest.</li>
+          <li><strong>The header says "tasks for today",</strong> since urgent tasks with no date count there too.</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <header>
+          <h3>1.0</h3>
+          <span class="build">Build 1 · October 30, 2026</span>
+        </header>
+        <ul><li><strong>The first beta.</strong> Everything above under "Everything it does".</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="privacy">
+    <h2 class="label" id="privacy">Privacy</h2>
+    <div class="privacy">
+      <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use Apple's on-device model, so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Found a bug or have an idea? Take a screenshot in Comet ToDo and tap <strong>Share Beta Feedback</strong>, or use the Send Beta Feedback button in TestFlight.</p>
+    <p>Comet ToDo is made by Jason Huang.</p>
+  </footer>
+</div>
+
+<script>
+  const copyButton = document.getElementById("copy-link");
+  const copied = document.getElementById("copied");
+  const linkText = document.getElementById("link-text");
+  copyButton.addEventListener("click", () => {
+    const show = () => { copied.hidden = false; setTimeout(() => { copied.hidden = true; }, 2000); };
+    const selectText = () => {
+      const range = document.createRange();
+      range.selectNodeContents(linkText);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    };
+    try {
+      navigator.clipboard.writeText(linkText.textContent.trim()).then(show, selectText);
+    } catch (error) {
+      selectText();
+    }
+  });
+</script>
+</body>
+</html>
