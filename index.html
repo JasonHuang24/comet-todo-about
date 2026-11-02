@@ -11,7 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-  /* Layout: a night sky like the app's, one centered column; hero pairs the pitch with the home screen, then app-style labeled sections. */
+  /* Layout: a night sky like the app's, one centered column. The hero pairs the pitch with the home screen; an
+     Overview / Updates toggle splits what the app does from every version's notes. Features are screenshot cards. */
   :root {
     --bg: #05060C;
     --panel: #0D1024;
@@ -26,6 +27,7 @@
     --periwinkle: #93A9E8;
     --on-accent: #05060C;
     --star: rgba(255, 255, 255, 0.75);
+    --bar: rgba(5, 6, 12, 0.72);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
     --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
     --body: "Manrope", -apple-system, "Segoe UI", system-ui, sans-serif;
@@ -37,6 +39,7 @@
       --bg: #F4F3FA; --panel: #FFFFFF; --raised: #ECEAF5; --line: rgba(20, 21, 42, 0.09);
       --fg: #14152A; --dim: #6B6984; --sky: #0B8FD1; --lavender: #8A63D2; --pink: #E0577A;
       --gold: #B8862B; --periwinkle: #4F6BD8; --on-accent: #FFFFFF; --star: rgba(20, 21, 42, 0.16);
+      --bar: rgba(244, 243, 250, 0.78);
       --shadow: 0 24px 60px rgba(40, 36, 90, 0.18);
       color-scheme: light;
     }
@@ -45,13 +48,14 @@
     --bg: #F4F3FA; --panel: #FFFFFF; --raised: #ECEAF5; --line: rgba(20, 21, 42, 0.09);
     --fg: #14152A; --dim: #6B6984; --sky: #0B8FD1; --lavender: #8A63D2; --pink: #E0577A;
     --gold: #B8862B; --periwinkle: #4F6BD8; --on-accent: #FFFFFF; --star: rgba(20, 21, 42, 0.16);
+    --bar: rgba(244, 243, 250, 0.78);
     --shadow: 0 24px 60px rgba(40, 36, 90, 0.18);
     color-scheme: light;
   }
 
-  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  :root { padding-bottom: env(safe-area-inset-bottom, 0px); }
   * { box-sizing: border-box; }
-  img { max-width: 100%; }
+  img { max-width: 100%; display: block; }
   [hidden] { display: none !important; }
   body {
     margin: 0;
@@ -79,6 +83,7 @@
   .wrap {
     position: relative; z-index: 1;
     max-width: 1040px; margin: 0 auto;
+    padding-top: env(safe-area-inset-top, 0px);
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
@@ -98,7 +103,7 @@
   /* Hero */
   .hero {
     display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center;
-    padding-block: 56px 40px;
+    padding-block: 56px 32px;
   }
   .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
   .brand img { width: 56px; height: 56px; border-radius: 13px; box-shadow: var(--shadow); }
@@ -126,21 +131,66 @@
   }
   .link-text { font: 500 13px/1.4 var(--mono); color: var(--dim); overflow-wrap: anywhere; user-select: all; }
   .copied { font: 500 12px/1 var(--mono); color: var(--sky); letter-spacing: 0.08em; }
+  .new-link { justify-self: start; font: 500 13px/1.4 var(--mono); letter-spacing: 0.06em; text-decoration: none; }
+  .new-link:hover { text-decoration: underline; }
 
   .phone {
     width: 100%; max-width: 300px; justify-self: center;
     border-radius: 34px; border: 1px solid var(--line); box-shadow: var(--shadow);
-    aspect-ratio: 395 / 860; object-fit: cover; background: var(--panel);
+    aspect-ratio: 1206 / 2622; object-fit: cover; background: var(--panel);
   }
 
-  section { padding-block: 44px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  /* Overview / Updates toggle, pinned to the top while you scroll. */
+  .views {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; justify-content: center;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 0 10px;
+    pointer-events: none;
+  }
+  .toggle {
+    display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; pointer-events: auto;
+    background: var(--bar); border: 1px solid var(--line); box-shadow: var(--shadow);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  }
+  .toggle button {
+    border: 0; border-radius: 999px; padding: 9px 22px; cursor: pointer;
+    background: transparent; color: var(--dim); font: 700 15px/1 var(--body);
+  }
+  .toggle button[aria-selected="true"] { background: var(--lavender); color: var(--on-accent); }
+
+  section { padding-block: 44px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; scroll-margin-top: 70px; }
   .lede { color: var(--dim); max-width: 62ch; margin: -8px auto 0; text-align: center; }
 
-  /* Screens */
-  .screens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
-  figure { margin: 0; display: grid; gap: 12px; justify-items: center; }
-  figure img { max-width: 240px; width: 100%; border-radius: 28px; border: 1px solid var(--line); box-shadow: var(--shadow); aspect-ratio: 395 / 860; }
-  figcaption { color: var(--dim); font-size: 14px; text-align: center; max-width: 30ch; }
+  /* Features: a screenshot on top, a few words below. */
+  .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .feature {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr; min-width: 0;
+  }
+  .feature img { width: 100%; aspect-ratio: 1206 / 1100; object-fit: cover; border-bottom: 1px solid var(--line); background: var(--raised); }
+  .feature div { padding: 16px 18px 20px; display: grid; gap: 6px; align-content: start; }
+  .feature h3 { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 600; }
+  .feature p { color: var(--dim); font-size: 15px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .scroll-hint { display: none; text-align: center; color: var(--dim); font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; }
+
+  /* Quick add: the screenshot beside what you type and the chips you get */
+  .quick { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px; align-items: center; }
+  .quick img { border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow); aspect-ratio: 1206 / 1100; object-fit: cover; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; min-width: 460px; }
+  th, td { text-align: left; padding: 12px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+  thead th { border-top: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+  td:first-child { font: 500 14px/1.5 var(--mono); color: var(--fg); white-space: nowrap; }
+  .chip {
+    display: inline-block; margin: 2px 6px 2px 0; padding: 4px 10px; border-radius: 999px;
+    font: 700 13px/1.3 var(--body); background: var(--raised);
+  }
+  .chip.date { color: var(--sky); }
+  .chip.repeat { color: var(--gold); }
+  .chip.urgent { color: var(--pink); }
+  .chip.alarm { color: var(--lavender); }
+  .chip.list { color: var(--periwinkle); }
 
   /* Why */
   .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px 28px; }
@@ -159,28 +209,6 @@
   .card li::marker { color: var(--lavender); font-family: var(--mono); }
   .card strong { color: var(--fg); font-weight: 700; }
 
-  /* Quick add: what you type, and the chips the app shows */
-  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); }
-  table { width: 100%; border-collapse: collapse; min-width: 520px; }
-  th, td { text-align: left; padding: 14px 18px; border-top: 1px solid var(--line); vertical-align: top; }
-  thead th { border-top: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
-  td:first-child { font: 500 14px/1.5 var(--mono); color: var(--fg); white-space: nowrap; }
-  .chip {
-    display: inline-block; margin: 2px 6px 2px 0; padding: 4px 10px; border-radius: 999px;
-    font: 700 13px/1.3 var(--body); background: var(--raised);
-  }
-  .chip.date { color: var(--sky); }
-  .chip.repeat { color: var(--gold); }
-  .chip.urgent { color: var(--pink); }
-  .chip.alarm { color: var(--lavender); }
-  .chip.list { color: var(--periwinkle); }
-
-  /* Features */
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
-  .feature h3 { display: flex; align-items: center; gap: 10px; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-  .feature p { color: var(--dim); }
-
   /* Patch notes */
   .notes { display: grid; gap: 18px; max-width: 760px; width: 100%; margin: 0 auto; }
   .release { border: 1px solid var(--line); border-radius: 18px; background: var(--panel); padding: 24px; display: grid; gap: 16px; min-width: 0; }
@@ -197,11 +225,24 @@
   .privacy p { color: var(--dim); }
   footer { padding-block: 32px 56px; text-align: center; color: var(--dim); font-size: 14px; display: grid; gap: 6px; }
 
+  @media (max-width: 900px) {
+    .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   @media (max-width: 760px) {
     .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 36px 24px; }
     .phone { max-width: 250px; }
-    .screens { grid-template-columns: repeat(3, minmax(200px, 1fr)); overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
-    .screens figure { scroll-snap-align: center; }
+    /* On a phone the cards slide sideways, so the page stays short. */
+    .features {
+      grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%;
+      overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+      margin-inline: -16px; padding: 0 16px 6px; scroll-padding-inline: 16px;
+      scrollbar-width: none;
+    }
+    .features::-webkit-scrollbar { display: none; }
+    .feature { scroll-snap-align: start; }
+    .scroll-hint { display: block; margin-top: -14px; }
+    .quick { grid-template-columns: minmax(0, 1fr); }
+    .quick img { max-width: 420px; justify-self: center; }
     .release { padding: 20px; }
   }
 </style>
@@ -225,236 +266,274 @@
           <span class="copied" id="copied" hidden>Copied</span>
         </div>
         <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
+        <a class="new-link" href="#updates" data-view="updates">What's new in 1.4 →</a>
       </div>
     </div>
-    <img class="phone" src="screenshots/home.png" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
+    <img class="phone" src="screenshots/home.jpg" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
   </header>
 
-  <section aria-labelledby="look">
-    <h2 class="label" id="look">A closer look</h2>
-    <div class="screens">
-      <figure>
-        <img src="screenshots/suggestion.png" alt="A new task with a bill photo attached and a suggested title, Pay electricity bill, with the amount and due date" loading="lazy">
-        <figcaption>Attach a bill and it suggests the title, a note and the due date.</figcaption>
-      </figure>
-      <figure>
-        <img src="screenshots/attachments.png" alt="Task cards, one with its attached bill photo shown as a small thumbnail" loading="lazy">
-        <figcaption>Photos and PDFs show right on the task's card.</figcaption>
-      </figure>
-      <figure>
-        <img src="screenshots/calendar.png" alt="The calendar tab: a month grid with dots on busy days and today's tasks below" loading="lazy">
-        <figcaption>A calendar you can drag tasks around on.</figcaption>
-      </figure>
+  <nav class="views" aria-label="Page">
+    <div class="toggle" role="tablist">
+      <button type="button" role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" data-view="overview">Overview</button>
+      <button type="button" role="tab" id="tab-updates" aria-controls="updates" aria-selected="false" data-view="updates" tabindex="-1">Updates</button>
     </div>
-  </section>
+  </nav>
 
-  <section aria-labelledby="why">
-    <h2 class="label" id="why">Why Comet ToDo</h2>
-    <div class="why">
-      <div><h3>It gets to the point</h3><p>Open it and today is right there: what's overdue, what's due, and a ring showing how much is left.</p></div>
-      <div><h3>It's hard to lose things</h3><p>A swipe archives instead of deleting, and the Archive works like a Trash you can restore from.</p></div>
-      <div><h3>It stays lean</h3><p>One "this matters" marker (Urgent), not flags plus priorities plus stars.</p></div>
-      <div><h3>It's private</h3><p>No account, no servers, no tracking. Your tasks stay on your device.</p></div>
-      <div><h3>It's smart without taking over</h3><p>Quick add reads dates as you type, and it always shows what it understood before anything changes.</p></div>
-    </div>
-  </section>
+  <div id="overview" role="tabpanel" aria-labelledby="tab-overview">
+    <section aria-labelledby="features">
+      <h2 class="label" id="features">Everything it does</h2>
+      <div class="features">
+        <article class="feature">
+          <img src="screenshots/features/glance.jpg" alt="The top of the main screen: Good evening, 2 tasks for today and 1 overdue, a ring showing 3 left, and filter chips" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--sky)"></span>Your day at a glance</h3>
+            <p>A greeting, a one-line summary and a progress ring. Filter by All, Today, Upcoming, Someday, Urgent or a list.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/reminder.jpg" alt="A task's details with a time of 9:00 AM, an Alarm switch, and Remind me set to 30 minutes before" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--lavender)"></span>Reminders and alarms</h3>
+            <p>A notification at the due time or earlier, with Complete and Snooze buttons. Alarm rings full screen, even on silent, with the tone you pick.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/repeat.jpg" alt="Repeat set to Weekly on Mon, Wed and Fri, with the three days lit up" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--gold)"></span>Repeats</h3>
+            <p>Daily, weekly on the days you pick, or monthly. Complete one and the next appears.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/urgent.jpg" alt="A task swiped to the right, showing the pink Urgent button, above and below tasks marked Urgent" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--pink)"></span>Urgent</h3>
+            <p>Swipe right or type <span style="font-family: var(--mono)">!</span>. An urgent task with no date counts as today's until it's done.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/suggestion.jpg" alt="A new task with a bill attached and a suggested title, Pay electricity bill, with the amount and a due date of Thu, Nov 12" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--periwinkle)"></span>Notes, attachments and suggestions</h3>
+            <p>Add photos, PDFs and files. Apple Intelligence suggests a title: a to-do for a bill, or "Photo of a cardinal" for a photo.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/checklist.jpg" alt="The Groceries checklist: Coffee beans and Milk, an Add item line, and Eggs crossed off" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--sky)"></span>Lists and checklists</h3>
+            <p>Lists with their own color and icon. A checklist is for plain items: type, press Return, type the next. Press and hold a list to edit it.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/calendar.jpg" alt="The calendar tab: November 2026 as a month grid, with dots under days that have tasks" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--lavender)"></span>Calendar and search</h3>
+            <p>Month and week views; drag a task to another day. Your calendar events can show alongside. Search covers notes and the Archive too.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/archive.jpg" alt="The Archive, titled Past chronicles: finished tasks grouped by week, each with a restore button" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--gold)"></span>Archive, with undo built in</h3>
+            <p>Finished tasks move here on their own, grouped by week. Restore anything with a swipe. Deleting for good only happens here.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="screenshots/features/largetext.jpg" alt="The main screen at a very large text size, still fitting the greeting, summary and chips" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--pink)"></span>Any text size, plus widgets</h3>
+            <p>Works at every text size, in landscape and with VoiceOver. A Today widget for the Home Screen and Lock Screen.</p>
+          </div>
+        </article>
+      </div>
+      <p class="scroll-hint" aria-hidden="true">Swipe for more →</p>
+    </section>
 
-  <section aria-labelledby="get">
-    <h2 class="label" id="get">Getting it</h2>
-    <div class="steps">
-      <div class="card">
-        <h3>Install</h3>
-        <ol>
-          <li>Get Apple's free <strong>TestFlight</strong> app from the App Store.</li>
-          <li>Open the <a href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">beta link</a> on your iPhone, iPad or Mac.</li>
-          <li>Tap <strong>Accept</strong>, then <strong>Install</strong>.</li>
-        </ol>
+    <section aria-labelledby="quick">
+      <h2 class="label" id="quick">Type it like you'd say it</h2>
+      <p class="lede">Write the task in plain words. Chips under the title show what Comet ToDo understood; tap one to keep those words as text instead.</p>
+      <div class="quick">
+        <img src="screenshots/features/quickadd.jpg" alt="A new task typed as Gym every Mon and Wed 7am, with chips reading Tomorrow, 7:00 AM and Weekly on Mon, Wed" loading="lazy">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">You type</th><th scope="col">You get</th></tr></thead>
+            <tbody>
+              <tr><td>Call mom Friday 6pm</td><td><span class="chip date">Friday, 6:00 PM</span></td></tr>
+              <tr><td>Water plants every other day</td><td><span class="chip repeat">Every 2 days</span></td></tr>
+              <tr><td>Renew passport !urgent</td><td><span class="chip urgent">Urgent</span></td></tr>
+              <tr><td>Dentist Tuesday 9am alarm</td><td><span class="chip date">Tuesday, 9:00 AM</span><span class="chip alarm">Alarm</span></td></tr>
+              <tr><td>Send invoice #Work</td><td><span class="chip list">Work list</span></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="card">
-        <h3>Update</h3>
-        <ol>
-          <li>Open <strong>TestFlight</strong> and tap <strong>Comet ToDo</strong>.</li>
-          <li>Tap <strong>Update</strong>. Or turn on <strong>Automatic Updates</strong> there and never think about it.</li>
-        </ol>
-        <p style="color: var(--dim)">Your tasks stay put when you update.</p>
-      </div>
-      <div class="card">
-        <h3>What you need</h3>
-        <ul>
-          <li>iPhone or iPad on <strong>iOS 27</strong>, or a <strong>Mac with Apple silicon</strong> on macOS 27.</li>
-          <li>Apple Intelligence for the smart extras. Everything else works without it.</li>
-          <li>On a Mac, alarms arrive as notifications.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section aria-labelledby="quick">
-    <h2 class="label" id="quick">Type it like you'd say it</h2>
-    <p class="lede">Write the task in plain words. Chips under the title show what Comet ToDo understood; tap one to keep those words as text instead.</p>
-    <div class="table-scroll">
-      <table>
-        <thead><tr><th scope="col">You type</th><th scope="col">You get</th></tr></thead>
-        <tbody>
-          <tr><td>Call mom Friday 6pm</td><td><span class="chip date">Friday, 6:00 PM</span></td></tr>
-          <tr><td>Gym every Mon and Wed 7am</td><td><span class="chip date">Next Mon or Wed, 7:00 AM</span><span class="chip repeat">Weekly on Mon, Wed</span></td></tr>
-          <tr><td>Water plants every other day</td><td><span class="chip repeat">Every 2 days</span></td></tr>
-          <tr><td>Renew passport !urgent</td><td><span class="chip urgent">Urgent</span></td></tr>
-          <tr><td>Dentist Tuesday 9am alarm</td><td><span class="chip date">Tuesday, 9:00 AM</span><span class="chip alarm">Alarm</span></td></tr>
-          <tr><td>Send invoice #Work</td><td><span class="chip list">Work list</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <section aria-labelledby="why">
+      <h2 class="label" id="why">Why Comet ToDo</h2>
+      <div class="why">
+        <div><h3>It gets to the point</h3><p>Open it and today is right there: what's overdue, what's due, and a ring showing how much is left.</p></div>
+        <div><h3>It's hard to lose things</h3><p>A swipe archives instead of deleting, and the Archive works like a Trash you can restore from.</p></div>
+        <div><h3>It stays lean</h3><p>One "this matters" marker (Urgent), not flags plus priorities plus stars.</p></div>
+        <div><h3>It's private</h3><p>No account, no servers, no tracking. Your tasks stay on your device.</p></div>
+        <div><h3>It's smart without taking over</h3><p>Quick add reads dates as you type, and it always shows what it understood before anything changes.</p></div>
+      </div>
+    </section>
 
-  <section aria-labelledby="features">
-    <h2 class="label" id="features">Everything it does</h2>
-    <div class="features">
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--sky)"></span>Your day at a glance</h3>
-        <p>A greeting (with your name, if you add it), a one-line summary, and a progress ring. Filters for All, Today, Upcoming, Someday, Urgent and each of your lists.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--lavender)"></span>Reminders and alarms</h3>
-        <p>A notification at the due time or earlier, with Complete and Snooze buttons. Turn on Alarm for things you can't miss: it rings full screen, even on silent, with the tone you pick.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--gold)"></span>Repeats</h3>
-        <p>Daily, weekly on the days you pick, or monthly. Complete one and the next appears. The 31st stays the 31st, and times survive daylight saving.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--pink)"></span>Urgent</h3>
-        <p>Swipe right or type <span style="font-family: var(--mono)">!</span>. An urgent task with no date counts as today's until it's done, and never turns "overdue".</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--periwinkle)"></span>Notes and attachments</h3>
-        <p>Formatted notes with lists and headings. Add photos, PDFs and files, see them full screen, and let Apple Intelligence suggest a title, from a bill's to-do to "Photo of a cardinal".</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--sky)"></span>Lists and checklists</h3>
-        <p>Lists with their own color and icon; press and hold one to edit or delete it. A checklist is for plain items like groceries: type, press Return, type the next one.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--lavender)"></span>Calendar and search</h3>
-        <p>Month and week views; drag a task to another day. Your calendar events can show alongside (read only). Search covers titles, notes and the Archive.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--gold)"></span>Archive, with undo built in</h3>
-        <p>Finished tasks move to the Archive on their own, grouped by week. Restore anything with one tap. Deleting for good only happens there.</p>
-      </div>
-      <div class="card feature">
-        <h3><span class="dot" style="background: var(--pink)"></span>Widgets and accessibility</h3>
-        <p>A Today widget for the Home Screen and Lock Screen. Works at every text size, in landscape, and with VoiceOver.</p>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="new">
-    <h2 class="label" id="new">What's new</h2>
-    <div class="notes">
-      <article class="release">
-        <header>
-          <h3>1.3 <span class="latest">Latest</span></h3>
-          <span class="build">Build 5 · November 2026</span>
-        </header>
-        <div class="group">
-          <h4>New</h4>
+    <section aria-labelledby="get">
+      <h2 class="label" id="get">Getting it</h2>
+      <div class="steps">
+        <div class="card">
+          <h3>Install</h3>
+          <ol>
+            <li>Get Apple's free <strong>TestFlight</strong> app from the App Store.</li>
+            <li>Open the <a href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">beta link</a> on your iPhone, iPad or Mac.</li>
+            <li>Tap <strong>Accept</strong>, then <strong>Install</strong>.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Update</h3>
+          <ol>
+            <li>Open <strong>TestFlight</strong> and tap <strong>Comet ToDo</strong>.</li>
+            <li>Tap <strong>Update</strong>. Or turn on <strong>Automatic Updates</strong> there and never think about it.</li>
+          </ol>
+          <p style="color: var(--dim)">Your tasks stay put when you update.</p>
+        </div>
+        <div class="card">
+          <h3>What you need</h3>
           <ul>
-            <li><strong>The version is at the bottom of Settings,</strong> handy when you report a problem.</li>
+            <li>iPhone or iPad on <strong>iOS 27</strong>, or a <strong>Mac with Apple silicon</strong> on macOS 27.</li>
+            <li>Apple Intelligence for the smart extras. Everything else works without it.</li>
+            <li>On a Mac, alarms arrive as notifications.</li>
           </ul>
         </div>
-        <div class="group">
-          <h4>Fixes</h4>
-          <ul>
-            <li><strong>Suggestions for every picture again.</strong> A photo of something gets a title saying what it shows, like "Photo of a bird", with the exact kind when it can tell. Bills, receipts, screenshots and notes get a to-do, in any language.</li>
-            <li><strong>No more borrowed titles.</strong> The model no longer copies example titles onto unrelated pictures.</li>
-          </ul>
-        </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="release">
-        <header>
-          <h3>1.2</h3>
-          <span class="build">Build 4 · November 2026</span>
-        </header>
-        <p style="color: var(--dim)">Most of this came from the first friends trying the app. Thank you!</p>
-        <div class="group">
-          <h4>New</h4>
-          <ul>
-            <li><strong>About button.</strong> The ⓘ next to Show Completed opens this page. After an update it shows a dot until you've had a look.</li>
-            <li><strong>Alarm sounds.</strong> Pick Comet, Orbit or Starlight in Settings, or keep iOS's standard alarm. Tap a tone to hear it.</li>
-            <li><strong>Press and hold a list's chip</strong> to edit or delete that list.</li>
-            <li><strong>A one-time tip explains swiping:</strong> right to mark Urgent, left to archive (and archived tasks can be restored).</li>
-          </ul>
-        </div>
-        <div class="group">
-          <h4>Fixes</h4>
-          <ul>
-            <li><strong>No more made-up suggestions for photos.</strong> Suggestions come only from pictures with words in them, like bills, receipts and screenshots.</li>
-          </ul>
-        </div>
-      </article>
+    <section aria-labelledby="privacy">
+      <h2 class="label" id="privacy">Privacy</h2>
+      <div class="privacy">
+        <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use Apple's on-device model, so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
+      </div>
+    </section>
+  </div>
 
-      <article class="release">
-        <header>
-          <h3>1.1</h3>
-          <span class="build">Build 3 · November 2026</span>
-        </header>
-        <div class="group">
-          <h4>Fixes</h4>
-          <ul>
-            <li><strong>Repeating tasks keep your changes.</strong> Un-completing or restoring a task no longer deletes a next copy you've edited.</li>
-            <li><strong>The Urgent swipe changes only Urgent.</strong> It no longer turns the alarm on too.</li>
-            <li><strong>Early reminders say the day,</strong> like "Due tomorrow, 6:00 PM".</li>
-            <li><strong>Late-night times stay on today.</strong> Turning on Time after 11 PM picks 11:59 PM, not midnight.</li>
-            <li><strong>The checklist warning counts only unfinished tasks.</strong></li>
-          </ul>
-        </div>
-        <div class="group">
-          <h4>Quick add</h4>
-          <ul>
-            <li><strong>Short day names:</strong> "Gym every Mon and Wed 7am", "Yoga every sat".</li>
-            <li><strong>A repeat starts on one of its days:</strong> "every weekday at 9am" typed on a Sunday starts Monday.</li>
-          </ul>
-        </div>
-        <div class="group">
-          <h4>Notifications and Mac</h4>
-          <ul>
-            <li><strong>If notifications are off,</strong> a task's details say it won't remind you.</li>
-            <li><strong>Runs on Apple silicon Macs.</strong> Alarms can't ring there, so a task with Alarm on gives you a notification instead.</li>
-          </ul>
-        </div>
-      </article>
+  <div id="updates" role="tabpanel" aria-labelledby="tab-updates">
+    <section aria-labelledby="new">
+      <h2 class="label" id="new">What's new</h2>
+      <div class="notes">
+        <article class="release">
+          <header>
+            <h3>1.4 <span class="latest">Latest</span></h3>
+            <span class="build">Build 6 · November 2026</span>
+          </header>
+          <div class="group">
+            <h4>Changes</h4>
+            <ul>
+              <li><strong>No more red dot on the ⓘ button.</strong> It still opens this page, where Updates has every version's notes.</li>
+              <li><strong>Settings says "Version 1.4"</strong> at the bottom, without the build number.</li>
+            </ul>
+          </div>
+        </article>
 
-      <article class="release">
-        <header>
-          <h3>1.0</h3>
-          <span class="build">Build 2 · October 30, 2026</span>
-        </header>
-        <ul>
-          <li><strong>Remove takes the attachment you picked</strong> (it used to always take the first).</li>
-          <li><strong>File tiles show the file's name.</strong></li>
-          <li><strong>Suggestions read whole PDF pages,</strong> can include a due date, and say so when there's nothing to suggest.</li>
-          <li><strong>The header says "tasks for today",</strong> since urgent tasks with no date count there too.</li>
-        </ul>
-      </article>
+        <article class="release">
+          <header>
+            <h3>1.3</h3>
+            <span class="build">Build 5 · November 2026</span>
+          </header>
+          <div class="group">
+            <h4>New</h4>
+            <ul>
+              <li><strong>The version is at the bottom of Settings,</strong> handy when you report a problem.</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h4>Fixes</h4>
+            <ul>
+              <li><strong>Suggestions for every picture again.</strong> A photo of something gets a title saying what it shows, like "Photo of a bird", with the exact kind when it can tell. Bills, receipts, screenshots and notes get a to-do, in any language.</li>
+              <li><strong>No more borrowed titles.</strong> The model no longer copies example titles onto unrelated pictures.</li>
+            </ul>
+          </div>
+        </article>
 
-      <article class="release">
-        <header>
-          <h3>1.0</h3>
-          <span class="build">Build 1 · October 30, 2026</span>
-        </header>
-        <ul><li><strong>The first beta.</strong> Everything above under "Everything it does".</li></ul>
-      </article>
-    </div>
-  </section>
+        <article class="release">
+          <header>
+            <h3>1.2</h3>
+            <span class="build">Build 4 · November 2026</span>
+          </header>
+          <p style="color: var(--dim)">Most of this came from the first friends trying the app. Thank you!</p>
+          <div class="group">
+            <h4>New</h4>
+            <ul>
+              <li><strong>About button.</strong> The ⓘ next to Show Completed opens this page. After an update it shows a dot until you've had a look.</li>
+              <li><strong>Alarm sounds.</strong> Pick Comet, Orbit or Starlight in Settings, or keep iOS's standard alarm. Tap a tone to hear it.</li>
+              <li><strong>Press and hold a list's chip</strong> to edit or delete that list.</li>
+              <li><strong>A one-time tip explains swiping:</strong> right to mark Urgent, left to archive (and archived tasks can be restored).</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h4>Fixes</h4>
+            <ul>
+              <li><strong>No more made-up suggestions for photos.</strong> Suggestions come only from pictures with words in them, like bills, receipts and screenshots.</li>
+            </ul>
+          </div>
+        </article>
 
-  <section aria-labelledby="privacy">
-    <h2 class="label" id="privacy">Privacy</h2>
-    <div class="privacy">
-      <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use Apple's on-device model, so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
-    </div>
-  </section>
+        <article class="release">
+          <header>
+            <h3>1.1</h3>
+            <span class="build">Build 3 · November 2026</span>
+          </header>
+          <div class="group">
+            <h4>Fixes</h4>
+            <ul>
+              <li><strong>Repeating tasks keep your changes.</strong> Un-completing or restoring a task no longer deletes a next copy you've edited.</li>
+              <li><strong>The Urgent swipe changes only Urgent.</strong> It no longer turns the alarm on too.</li>
+              <li><strong>Early reminders say the day,</strong> like "Due tomorrow, 6:00 PM".</li>
+              <li><strong>Late-night times stay on today.</strong> Turning on Time after 11 PM picks 11:59 PM, not midnight.</li>
+              <li><strong>The checklist warning counts only unfinished tasks.</strong></li>
+            </ul>
+          </div>
+          <div class="group">
+            <h4>Quick add</h4>
+            <ul>
+              <li><strong>Short day names:</strong> "Gym every Mon and Wed 7am", "Yoga every sat".</li>
+              <li><strong>A repeat starts on one of its days:</strong> "every weekday at 9am" typed on a Sunday starts Monday.</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h4>Notifications and Mac</h4>
+            <ul>
+              <li><strong>If notifications are off,</strong> a task's details say it won't remind you.</li>
+              <li><strong>Runs on Apple silicon Macs.</strong> Alarms can't ring there, so a task with Alarm on gives you a notification instead.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="release">
+          <header>
+            <h3>1.0</h3>
+            <span class="build">Build 2 · October 30, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Remove takes the attachment you picked</strong> (it used to always take the first).</li>
+            <li><strong>File tiles show the file's name.</strong></li>
+            <li><strong>Suggestions read whole PDF pages,</strong> can include a due date, and say so when there's nothing to suggest.</li>
+            <li><strong>The header says "tasks for today",</strong> since urgent tasks with no date count there too.</li>
+          </ul>
+        </article>
+
+        <article class="release">
+          <header>
+            <h3>1.0</h3>
+            <span class="build">Build 1 · October 30, 2026</span>
+          </header>
+          <ul><li><strong>The first beta.</strong> Everything under "Everything it does" in the Overview.</li></ul>
+        </article>
+      </div>
+    </section>
+  </div>
 
   <footer>
     <p>Found a bug or have an idea? Take a screenshot in Comet ToDo and tap <strong>Share Beta Feedback</strong>, or use the Send Beta Feedback button in TestFlight.</p>
@@ -481,6 +560,48 @@
       selectText();
     }
   });
+
+  // Overview / Updates. The address ends in #updates while Updates shows, so that view can be linked to.
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const bar = document.querySelector(".views");
+  function showView(name, { scroll = false, focus = false } = {}) {
+    for (const tab of tabs) {
+      const isOn = tab.dataset.view === name;
+      tab.setAttribute("aria-selected", String(isOn));
+      tab.tabIndex = isOn ? 0 : -1;
+      document.getElementById(tab.getAttribute("aria-controls")).hidden = !isOn;
+      if (isOn && focus) tab.focus();
+    }
+    // Start the newly shown view at its top, just under the toggle.
+    const top = document.getElementById(name).getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
+    if (scroll || window.scrollY > top) window.scrollTo({ top });
+  }
+  function setView(name, options) {
+    history.replaceState(null, "", name === "updates" ? "#updates" : location.pathname + location.search);
+    showView(name, options);
+  }
+  for (const tab of tabs) {
+    tab.addEventListener("click", () => setView(tab.dataset.view));
+    tab.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      const next = tabs[(tabs.indexOf(tab) + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      setView(next.dataset.view, { focus: true });
+    });
+  }
+  for (const link of document.querySelectorAll('a[data-view]')) {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setView(link.dataset.view, { scroll: true });
+    });
+  }
+  window.addEventListener("hashchange", () => showView(location.hash === "#updates" ? "updates" : "overview"));
+  if (location.hash === "#updates") {
+    showView("updates");
+    requestAnimationFrame(() => showView("updates", { scroll: true }));
+  } else {
+    showView("overview");
+  }
 </script>
 </body>
 </html>
