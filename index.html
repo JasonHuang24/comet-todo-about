@@ -425,7 +425,25 @@
       <div class="notes">
         <article class="release">
           <header>
-            <h3>1.6 <span class="latest">Latest</span></h3>
+            <h3>1.7 <span class="latest">Latest</span></h3>
+            <span class="build">Build 9 · November 2026</span>
+          </header>
+          <div class="group">
+            <h4>Fixes</h4>
+            <ul>
+              <li><strong>Make a Task keeps the event as it is.</strong> A task made from a calendar event keeps the event's name, day and time. Before, an event called "Team sync weekly" could become a weekly task with no time, and "Dinner 7pm" could move to tomorrow.</li>
+              <li><strong>Cancel in the custom theme editor puts back your theme.</strong> It could leave the app showing another theme until it was opened again. Nothing was lost.</li>
+              <li><strong>Reminders start as soon as you allow notifications.</strong> A task added while notifications were off now reminds you once you turn them on, without reopening the app.</li>
+              <li><strong>A repeating task's next one stays when you've replaced its photo.</strong> Un-completing the earlier one used to delete it, new photo and all.</li>
+              <li><strong>An early reminder that's too late comes when the task is due.</strong> "30 min before" on a task due in 15 minutes used to mean no reminder at all. Now you're reminded at the due time, and the task's details say so. Daily tasks reminding "1 day before" keep reminding too.</li>
+              <li><strong>Android</strong> gets the same fixes before its first version on Google Play.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="release">
+          <header>
+            <h3>1.6</h3>
             <span class="build">Build 8 · November 2026</span>
           </header>
           <div class="group">
