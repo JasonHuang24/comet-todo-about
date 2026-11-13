@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Comet ToDo is a calm, private to-do app for iPhone, iPad and Mac. Join the free TestFlight beta.">
+<meta name="description" content="Comet ToDo is a calm, private to-do app for iPhone, iPad, Mac and Android. Join the free beta.">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <title>Comet ToDo</title>
@@ -133,6 +133,7 @@
   .copied { font: 500 12px/1 var(--mono); color: var(--sky); letter-spacing: 0.08em; }
   .new-link { justify-self: start; font: 500 13px/1.4 var(--mono); letter-spacing: 0.06em; text-decoration: none; }
   .new-link:hover { text-decoration: underline; }
+  .android-note { color: var(--dim); font-size: 14px; }
 
   .phone {
     width: 100%; max-width: 300px; justify-self: center;
@@ -254,11 +255,11 @@
     <div>
       <div class="brand">
         <img src="icon.png" alt="The Comet ToDo icon: a white check mark in a rainbow ring on a starry sky">
-        <span class="eyebrow">Free beta · iPhone, iPad and Mac</span>
+        <span class="eyebrow">Free beta · iPhone, iPad, Mac and Android</span>
       </div>
       <h1>Comet ToDo</h1>
       <p class="pitch">A calm, private to-do app with a night-sky look.</p>
-      <p class="sub">It shows what matters today, keeps you from losing anything by accident, and uses Apple Intelligence only where it saves you typing.</p>
+      <p class="sub">It shows what matters today, keeps you from losing anything by accident, and uses on-device AI only where it saves you typing.</p>
       <div class="join">
         <div class="join-row">
           <a class="button" href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">Join the beta on TestFlight</a>
@@ -266,7 +267,8 @@
           <span class="copied" id="copied" hidden>Copied</span>
         </div>
         <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
-        <a class="new-link" href="#updates" data-view="updates">What's new in 1.4 →</a>
+        <p class="android-note">On Android? It's tested through Google Play. <a href="#get">Here's how to join</a>.</p>
+        <a class="new-link" href="#updates" data-view="updates">What's new in 1.8 →</a>
       </div>
     </div>
     <img class="phone" src="screenshots/home.jpg" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
@@ -315,7 +317,7 @@
           <img src="screenshots/features/suggestion.jpg" alt="A new task with a bill attached and a suggested title, Pay electricity bill, with the amount and a due date of Thu, Nov 12" loading="lazy">
           <div>
             <h3><span class="dot" style="background: var(--periwinkle)"></span>Notes, attachments and suggestions</h3>
-            <p>Add photos, PDFs and files. Apple Intelligence suggests a title: a to-do for a bill, or "Photo of a cardinal" for a photo.</p>
+            <p>Add photos, PDFs and files. On-device AI suggests a title: a to-do for a bill, or "Photo of a cardinal" for a photo.</p>
           </div>
         </article>
         <article class="feature">
@@ -329,7 +331,7 @@
           <img src="screenshots/features/calendar.jpg" alt="The calendar tab: November 2026 as a month grid, with dots under days that have tasks" loading="lazy">
           <div>
             <h3><span class="dot" style="background: var(--lavender)"></span>Calendar and search</h3>
-            <p>Month and week views; drag a task to another day. Your calendar events can show alongside. Search covers notes and the Archive too.</p>
+            <p>Month and week views; drag a task to another day. Pick which calendars' events show alongside, and make a task from any event. Search covers notes and the Archive too.</p>
           </div>
         </article>
         <article class="feature">
@@ -340,10 +342,17 @@
           </div>
         </article>
         <article class="feature">
+          <img src="screenshots/features/themes.jpg" alt="The Theme screen: Comet, Aurora (picked), Nebula and Lunar, each with a sample task in its own colors" loading="lazy">
+          <div>
+            <h3><span class="dot" style="background: var(--periwinkle)"></span>Themes, or your own</h3>
+            <p>Five looks, from the starry Comet to the light Daylight, or make one from a color or a photo of yours. Text stays readable whatever you pick.</p>
+          </div>
+        </article>
+        <article class="feature">
           <img src="screenshots/features/largetext.jpg" alt="The main screen at a very large text size, still fitting the greeting, summary and chips" loading="lazy">
           <div>
             <h3><span class="dot" style="background: var(--pink)"></span>Any text size, plus widgets</h3>
-            <p>Works at every text size, in landscape and with VoiceOver. A Today widget for the Home Screen and Lock Screen.</p>
+            <p>Works at every text size, in landscape and with VoiceOver or TalkBack, and buttons can be Large or Extra Large. A Today widget for the Home Screen, and the Lock Screen on iPhone.</p>
           </div>
         </article>
       </div>
@@ -385,7 +394,7 @@
       <h2 class="label" id="get">Getting it</h2>
       <div class="steps">
         <div class="card">
-          <h3>Install</h3>
+          <h3>Install on iPhone, iPad or Mac</h3>
           <ol>
             <li>Get Apple's free <strong>TestFlight</strong> app from the App Store.</li>
             <li>Open the <a href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">beta link</a> on your iPhone, iPad or Mac.</li>
@@ -393,7 +402,16 @@
           </ol>
         </div>
         <div class="card">
-          <h3>Update</h3>
+          <h3>Install on Android</h3>
+          <ol>
+            <li>Send Jason the email address of the Google account on your phone, so he can add you as a tester.</li>
+            <li>On your phone, open the <a href="https://play.google.com/apps/internaltest/4699802579851628360" target="_blank" rel="noopener">Android testing link</a> and tap <strong>Accept invite</strong>.</li>
+            <li>Tap <strong>Download test app</strong>, then <strong>Install</strong> in Google Play.</li>
+          </ol>
+          <p style="color: var(--dim)">Google Play keeps it up to date, like any other app.</p>
+        </div>
+        <div class="card">
+          <h3>Update on iPhone, iPad or Mac</h3>
           <ol>
             <li>Open <strong>TestFlight</strong> and tap <strong>Comet ToDo</strong>.</li>
             <li>Tap <strong>Update</strong>. Or turn on <strong>Automatic Updates</strong> there and never think about it.</li>
@@ -404,7 +422,8 @@
           <h3>What you need</h3>
           <ul>
             <li>iPhone or iPad on <strong>iOS 27</strong>, or a <strong>Mac with Apple silicon</strong> on macOS 27.</li>
-            <li>Apple Intelligence for the smart extras. Everything else works without it.</li>
+            <li>Or an <strong>Android phone</strong> on Android 12 or later.</li>
+            <li>Apple Intelligence, or Gemini Nano on Android, for the smart extras. Everything else works without it.</li>
             <li>On a Mac, alarms arrive as notifications.</li>
           </ul>
         </div>
@@ -414,7 +433,7 @@
     <section aria-labelledby="privacy">
       <h2 class="label" id="privacy">Privacy</h2>
       <div class="privacy">
-        <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use Apple's on-device model, so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
+        <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use the AI model on your device (Apple Intelligence, or Gemini Nano on Android), so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
       </div>
     </section>
   </div>
@@ -613,7 +632,7 @@
   </div>
 
   <footer>
-    <p>Found a bug or have an idea? Take a screenshot in Comet ToDo and tap <strong>Share Beta Feedback</strong>, or use the Send Beta Feedback button in TestFlight.</p>
+    <p>Found a bug or have an idea? On iPhone, iPad or Mac, take a screenshot in Comet ToDo and tap <strong>Share Beta Feedback</strong>, or use the Send Beta Feedback button in TestFlight. On Android, send feedback from Comet ToDo's page in Google Play, or tell Jason.</p>
     <p>Comet ToDo is made by Jason Huang.</p>
   </footer>
 </div>
