@@ -131,8 +131,6 @@
   }
   .link-text { font: 500 13px/1.4 var(--mono); color: var(--dim); overflow-wrap: anywhere; user-select: all; }
   .copied { font: 500 12px/1 var(--mono); color: var(--sky); letter-spacing: 0.08em; }
-  .new-link { justify-self: start; font: 500 13px/1.4 var(--mono); letter-spacing: 0.06em; text-decoration: none; }
-  .new-link:hover { text-decoration: underline; }
   .android-note { color: var(--dim); font-size: 14px; }
 
   .phone {
@@ -251,29 +249,6 @@
 <body>
 <div class="sky" aria-hidden="true"></div>
 <div class="wrap">
-  <header class="hero">
-    <div>
-      <div class="brand">
-        <img src="icon.png" alt="The Comet ToDo icon: a white check mark in a rainbow ring on a starry sky">
-        <span class="eyebrow">Free beta · iPhone, iPad, Mac and Android</span>
-      </div>
-      <h1>Comet ToDo</h1>
-      <p class="pitch">A calm, private to-do app with a night-sky look.</p>
-      <p class="sub">It shows what matters today, keeps you from losing anything by accident, and uses on-device AI only where it saves you typing.</p>
-      <div class="join">
-        <div class="join-row">
-          <a class="button" href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">Join the beta on TestFlight</a>
-          <button class="button ghost" id="copy-link" type="button">Copy link</button>
-          <span class="copied" id="copied" hidden>Copied</span>
-        </div>
-        <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
-        <p class="android-note">On Android? It's tested through Google Play. <a href="#get">Here's how to join</a>.</p>
-        <a class="new-link" href="#updates" data-view="updates">What's new in 1.9 →</a>
-      </div>
-    </div>
-    <img class="phone" src="screenshots/home.jpg" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
-  </header>
-
   <nav class="views" aria-label="Page">
     <div class="toggle" role="tablist">
       <button type="button" role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" data-view="overview">Overview</button>
@@ -282,6 +257,28 @@
   </nav>
 
   <div id="overview" role="tabpanel" aria-labelledby="tab-overview">
+    <header class="hero">
+      <div>
+        <div class="brand">
+          <img src="icon.png" alt="The Comet ToDo icon: a white check mark in a rainbow ring on a starry sky">
+          <span class="eyebrow">Free beta · iPhone, iPad, Mac and Android</span>
+        </div>
+        <h1>Comet ToDo</h1>
+        <p class="pitch">A calm, private to-do app with a night-sky look.</p>
+        <p class="sub">It shows what matters today, keeps you from losing anything by accident, and uses on-device AI only where it saves you typing.</p>
+        <div class="join">
+          <div class="join-row">
+            <a class="button" href="https://testflight.apple.com/join/DXczWgmJ" target="_blank" rel="noopener">Join the beta on TestFlight</a>
+            <button class="button ghost" id="copy-link" type="button">Copy link</button>
+            <span class="copied" id="copied" hidden>Copied</span>
+          </div>
+          <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
+          <p class="android-note">On Android? It's tested through Google Play. <a href="#get">Here's how to join</a>.</p>
+        </div>
+      </div>
+      <img class="phone" src="screenshots/home.jpg" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
+    </header>
+
     <section aria-labelledby="features">
       <h2 class="label" id="features">Everything it does</h2>
       <div class="features">
