@@ -105,6 +105,20 @@
     display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center;
     padding-block: 56px 32px;
   }
+  /* What's new, the first thing on the page: the latest version and its main change, opening Updates. */
+  .news {
+    display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
+    margin-bottom: 28px; padding: 7px 14px 7px 7px;
+    border: 1px solid var(--line); border-radius: 18px; background: var(--panel);
+    color: var(--fg); text-decoration: none; font-size: 14px; line-height: 1.35;
+  }
+  .news:hover { border-color: var(--sky); }
+  .news:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+  .news-tag {
+    flex: none; padding: 4px 10px; border-radius: 999px; background: var(--sky); color: var(--on-accent);
+    font: 500 11px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .news-arrow { flex: none; color: var(--sky); }
   .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
   .brand img { width: 56px; height: 56px; border-radius: 13px; box-shadow: var(--shadow); }
   .eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
@@ -131,8 +145,6 @@
   }
   .link-text { font: 500 13px/1.4 var(--mono); color: var(--dim); overflow-wrap: anywhere; user-select: all; }
   .copied { font: 500 12px/1 var(--mono); color: var(--sky); letter-spacing: 0.08em; }
-  .new-link { justify-self: start; font: 500 13px/1.4 var(--mono); letter-spacing: 0.06em; text-decoration: none; }
-  .new-link:hover { text-decoration: underline; }
   .android-note { color: var(--dim); font-size: 14px; }
 
   .phone {
@@ -253,6 +265,11 @@
 <div class="wrap">
   <header class="hero">
     <div>
+      <a class="news" href="#updates" data-view="updates">
+        <span class="news-tag">New in 1.8.2</span>
+        <span>Alarm sound has its own screen, and clearer battery steps on Android</span>
+        <span class="news-arrow" aria-hidden="true">→</span>
+      </a>
       <div class="brand">
         <img src="icon.png" alt="The Comet ToDo icon: a white check mark in a rainbow ring on a starry sky">
         <span class="eyebrow">Free beta · iPhone, iPad, Mac and Android</span>
@@ -268,7 +285,6 @@
         </div>
         <span class="link-text" id="link-text">https://testflight.apple.com/join/DXczWgmJ</span>
         <p class="android-note">On Android? It's tested through Google Play. <a href="#get">Here's how to join</a>.</p>
-        <a class="new-link" href="#updates" data-view="updates">What's new in 1.8.2 →</a>
       </div>
     </div>
     <img class="phone" src="screenshots/home.jpg" alt="The main screen: a greeting, today's summary and progress ring, filter chips, and tasks grouped by Overdue, Today, Tomorrow and Later">
