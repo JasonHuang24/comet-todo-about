@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
   /* Layout: a night sky like the app's, one centered column. The hero pairs the pitch with the home screen; an
-     Overview / Updates toggle splits what the app does from every version's notes. Features are screenshot cards. */
+     Overview / Updates / Help toggle splits what the app does from every version's notes and the how-tos.
+     Features are screenshot cards. */
   :root {
     --bg: #05060C;
     --panel: #0D1024;
@@ -139,7 +140,7 @@
     aspect-ratio: 1206 / 2622; object-fit: cover; background: var(--panel);
   }
 
-  /* Overview / Updates toggle, pinned to the top while you scroll. */
+  /* Overview / Updates / Help toggle, pinned to the top while you scroll. */
   .views {
     position: sticky; top: 0; z-index: 5;
     display: flex; justify-content: center;
@@ -201,12 +202,14 @@
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
   .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
-    padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0;
+    padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-content: start; min-width: 0;
+    overflow-wrap: anywhere; /* A long address, like Google's sync page, wraps instead of widening the card. */
   }
   .card h3 { font-size: 19px; font-weight: 600; }
   .card ol, .card ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--dim); }
   .card li::marker { color: var(--lavender); font-family: var(--mono); }
   .card strong { color: var(--fg); font-weight: 700; }
+  .card > p { color: var(--dim); }
 
   /* Patch notes */
   .notes { display: grid; gap: 18px; max-width: 760px; width: 100%; margin: 0 auto; }
@@ -214,7 +217,7 @@
   .release header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
   .release h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
   .build { font: 500 12px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
-  .release h4 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .release h4, .card h4 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
   .release ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; color: var(--dim); }
   .release li strong { color: var(--fg); font-weight: 700; }
   .group { display: grid; gap: 10px; }
@@ -253,6 +256,7 @@
     <div class="toggle" role="tablist">
       <button type="button" role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" data-view="overview">Overview</button>
       <button type="button" role="tab" id="tab-updates" aria-controls="updates" aria-selected="false" data-view="updates" tabindex="-1">Updates</button>
+      <button type="button" role="tab" id="tab-help" aria-controls="help" aria-selected="false" data-view="help" tabindex="-1">Help</button>
     </div>
   </nav>
 
@@ -422,14 +426,6 @@
             <li>Or an <strong>Android phone</strong> on Android 12 or later.</li>
             <li>Apple Intelligence, or Gemini Nano on Android, for the smart extras. Everything else works without it.</li>
             <li>On a Mac, alarms arrive as notifications.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>If alarms or reminders are off</h3>
-          <ul>
-            <li>The first time a task has a time, Comet ToDo asks to send notifications, and for an alarm, to ring alarms. Tap <strong>Allow</strong>.</li>
-            <li>Tapped Don't Allow? iOS won't ask again. Open the <strong>Settings app</strong> (not Comet ToDo's Settings), go to <strong>Apps → Comet ToDo</strong>, then turn on <strong>Notifications</strong> and <strong>Alarms</strong>.</li>
-            <li>On Android, Comet ToDo's <strong>Settings → Reminders</strong> lists anything that's off, with a button to fix each one.</li>
           </ul>
         </div>
       </div>
@@ -692,6 +688,42 @@
     </section>
   </div>
 
+  <div id="help" role="tabpanel" aria-labelledby="tab-help">
+    <section aria-labelledby="guides">
+      <h2 class="label" id="guides">Help</h2>
+      <p class="lede">How-tos for things testers have asked about.</p>
+      <div class="steps">
+        <div class="card" id="alarms-off">
+          <h3>If alarms or reminders are off</h3>
+          <p>Comet ToDo asks to send notifications the first time a task has a time, and to ring alarms the first time you turn one on. If you tapped Don't Allow, your phone won't ask again: the switches are in the phone's own settings, not in Comet ToDo's.</p>
+          <h4>iPhone or iPad</h4>
+          <ol>
+            <li>In a task, tap <strong>Allow in Settings</strong> under Alarm. Or open the <strong>Settings app</strong> and go to <strong>Apps → Comet ToDo</strong>.</li>
+            <li>Turn on <strong>Alarms</strong>.</li>
+            <li>Tap <strong>Notifications</strong> and turn on <strong>Allow Notifications</strong>.</li>
+          </ol>
+          <p>Back in Comet ToDo, the task's Alarm says "Rings even on silent".</p>
+          <h4>Android</h4>
+          <p>In Comet ToDo, open <strong>Settings → Reminders</strong>. It lists anything that's off, each with a button that opens the right screen.</p>
+          <h4>Mac</h4>
+          <p>Alarms arrive as notifications. Turn them on in <strong>System Settings → Notifications → Comet ToDo</strong>.</p>
+        </div>
+        <div class="card" id="friend-free">
+          <h3>See when a friend is free</h3>
+          <p>The Calendar tab shows the calendars on your phone, so a calendar a friend shares with you shows up next to your tasks. Google Calendar works on both iPhone and Android.</p>
+          <ol>
+            <li>Both of you use Google Calendar. On an iPhone, add your Google account in the <strong>Settings app → Apps → Calendar → Calendar Accounts</strong>.</li>
+            <li>On a computer, open <strong>calendar.google.com</strong>, then your calendar's <strong>Settings and sharing → Share with specific people</strong>. Add your friend's Gmail address and choose <strong>See only free/busy</strong> to share only when you're busy. (Google Calendar's phone app can't share.)</li>
+            <li>Your friend opens Google's email and adds your calendar.</li>
+            <li>On an iPhone, tick the new calendar on Google's sync page, <strong>calendar.google.com/calendar/syncselect</strong>, so it reaches the phone.</li>
+            <li>In Comet ToDo, open <strong>Calendar</strong>. Choose which calendars show in <strong>Settings → Calendars</strong>.</li>
+          </ol>
+          <p>Free/busy shows only "Busy" for each event, not what it is.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <footer>
     <p>Found a bug or have an idea? On iPhone, iPad or Mac, take a screenshot in Comet ToDo and tap <strong>Share Beta Feedback</strong>, or use the Send Beta Feedback button in TestFlight. On Android, send feedback from Comet ToDo's page in Google Play, or tell Jason.</p>
     <p>Comet ToDo is made by Jason Huang.</p>
@@ -718,9 +750,11 @@
     }
   });
 
-  // Overview / Updates. The address ends in #updates while Updates shows, so that view can be linked to.
+  // Overview / Updates / Help. The address ends in #updates or #help while that view shows, so it can be linked to.
   const tabs = [...document.querySelectorAll('[role="tab"]')];
   const bar = document.querySelector(".views");
+  // The view an address names (#updates, #help), else Overview.
+  const viewFor = (hash) => tabs.find((tab) => tab.dataset.view !== "overview" && "#" + tab.dataset.view === hash)?.dataset.view ?? "overview";
   function showView(name, { scroll = false, focus = false } = {}) {
     for (const tab of tabs) {
       const isOn = tab.dataset.view === name;
@@ -734,7 +768,7 @@
     if (scroll || window.scrollY > top) window.scrollTo({ top });
   }
   function setView(name, options) {
-    history.replaceState(null, "", name === "updates" ? "#updates" : location.pathname + location.search);
+    history.replaceState(null, "", name === "overview" ? location.pathname + location.search : "#" + name);
     showView(name, options);
   }
   for (const tab of tabs) {
@@ -752,13 +786,10 @@
       setView(link.dataset.view, { scroll: true });
     });
   }
-  window.addEventListener("hashchange", () => showView(location.hash === "#updates" ? "updates" : "overview"));
-  if (location.hash === "#updates") {
-    showView("updates");
-    requestAnimationFrame(() => showView("updates", { scroll: true }));
-  } else {
-    showView("overview");
-  }
+  window.addEventListener("hashchange", () => showView(viewFor(location.hash)));
+  const first = viewFor(location.hash);
+  showView(first);
+  if (first !== "overview") requestAnimationFrame(() => showView(first, { scroll: true }));
 </script>
 </body>
 </html>
