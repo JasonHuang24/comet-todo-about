@@ -386,7 +386,7 @@
         <div><h3>It gets to the point</h3><p>Open it and today is right there: what's overdue, what's due, and a ring showing how much is left.</p></div>
         <div><h3>It's hard to lose things</h3><p>A swipe archives instead of deleting, and the Archive works like a Trash you can restore from.</p></div>
         <div><h3>It stays lean</h3><p>One "this matters" marker (Urgent), not flags plus priorities plus stars.</p></div>
-        <div><h3>It's private</h3><p>No account, no servers, no tracking. Your tasks stay on your device.</p></div>
+        <div><h3>It's private</h3><p>No account, no ads, no tracking. Your tasks stay on your device, unless you share a list with a friend.</p></div>
         <div><h3>It's smart without taking over</h3><p>Quick add reads dates as you type, and it always shows what it understood before anything changes.</p></div>
       </div>
     </section>
@@ -434,7 +434,8 @@
     <section aria-labelledby="privacy">
       <h2 class="label" id="privacy">Privacy</h2>
       <div class="privacy">
-        <p>No account, no sign-in, no servers and no analytics. Your tasks, notes and attachments stay on your device. Quick add and attachment suggestions use the AI model on your device (Apple Intelligence, or Gemini Nano on Android), so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
+        <p>No account, no ads and no analytics. Your tasks, notes and attachments stay on your device, except a list you choose to share. A shared list's tasks (titles, notes, dates, repeats, Urgent and done) are kept on Comet ToDo's server, on Google Firebase, so every phone in the list stays in step. Alarms, reminder times and attachments never leave your phone. Each phone joins anonymously, with no email or password, and friends in the list see only the name in Settings → Greeting, if you've set one. Stop sharing and the list is removed from the server; every phone keeps its tasks.</p>
+        <p>Quick add and attachment suggestions use the AI model on your device (Apple Intelligence, or Gemini Nano on Android), so nothing you write or attach is sent anywhere. Calendar access is optional and only used to show your events next to your tasks.</p>
       </div>
     </section>
   </div>
@@ -451,7 +452,8 @@
           <div class="group">
             <h4>New</h4>
             <ul>
-              <li><strong>Send a Copy.</strong> Share a task or a whole list with a friend, iPhone or Android. They see what's in it and tap Add.</li>
+              <li><strong>Shared lists.</strong> Share a list with a friend, on iPhone or Android, and you both see each other's changes as they happen: check something off and it's checked off on their phone too. In the list, tap Share with a Friend and send them the code.</li>
+              <li><strong>Send a Copy.</strong> Send a task or a whole list to a friend, iPhone or Android. They see what's in it and tap Add.</li>
               <li><strong>Your own alarm sound.</strong> Settings → Alarm sound → Choose a Sound: any audio file, like a meow or a voice memo, listed with the tones. Any task can ring with it.</li>
               <li><strong>Take Photo.</strong> The paperclip menu can open the camera, and the photo is attached right away, ready for a suggestion.</li>
               <li><strong>A suggested list.</strong> Type a new task's title and the on-device AI may suggest one of your lists, like Groceries for "Buy milk". Tap Use to put it there; it never picks a list by itself.</li>
@@ -733,6 +735,17 @@
           </ol>
           <p>On iPhone, the first 30 seconds are kept. <strong>Remove</strong> puts its alarms back on another tone.</p>
         </div>
+        <div class="card" id="shared-list">
+          <h3>Share a list live</h3>
+          <p>Work on a list together, like a trip or a project: what one of you changes shows up on the other's phone, iPhone or Android, as soon as they open Comet ToDo. No messages needed.</p>
+          <ol>
+            <li>Tap <strong>Edit lists</strong> at the end of the list chips, then the list.</li>
+            <li>Under Sharing, tap <strong>Share with a Friend</strong>. A code like K7QM-4XPA appears.</li>
+            <li>Tap <strong>Send the Code</strong> and send it any way you like.</li>
+            <li>Your friend taps <strong>Edit lists → Join a Shared List</strong>, enters the code, checks the list's name and taps <strong>✓</strong>.</li>
+          </ol>
+          <p>Tasks, notes, dates and Urgent are shared. Alarms, reminder times and attachments stay your own. <strong>Stop Sharing</strong> (or <strong>Leave Shared List</strong> for a friend) ends it, and everyone keeps the tasks.</p>
+        </div>
         <div class="card" id="send-copy">
           <h3>Share a task or list with a friend</h3>
           <p>Send a copy of a task, or a whole list and its tasks, to someone on an iPhone or an Android phone.</p>
@@ -741,7 +754,7 @@
             <li>Send it any way you like: Messages, Discord, WhatsApp, AirDrop or Quick Share.</li>
             <li>Your friend opens the file in Comet ToDo, checks what's in it, and taps <strong>Add</strong>. On an iPhone: tap the file, then Share, then <strong>Comet ToDo</strong>. On Android: open it and choose <strong>Comet ToDo</strong>.</li>
           </ol>
-          <p>It's a copy, so later changes don't sync. A list goes into theirs with the same name, or becomes a new one.</p>
+          <p>It's a copy, so later changes don't sync; to keep a list in step, share it live instead. A list goes into theirs with the same name, or becomes a new one.</p>
         </div>
         <div class="card" id="friend-free">
           <h3>See when a friend is free</h3>
