@@ -210,6 +210,8 @@
   .card li::marker { color: var(--lavender); font-family: var(--mono); }
   .card strong { color: var(--fg); font-weight: 700; }
   .card > p { color: var(--dim); }
+  /* What a sent copy looks like, as it arrives in a message. */
+  .card pre { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--raised); color: var(--fg); font: 14px/1.5 var(--body); white-space: pre-wrap; overflow-wrap: anywhere; }
 
   /* Patch notes */
   .notes { display: grid; gap: 18px; max-width: 760px; width: 100%; margin: 0 auto; }
@@ -446,7 +448,19 @@
       <div class="notes">
         <article class="release">
           <header>
-            <h3>1.9.1 <span class="latest">Latest</span></h3>
+            <h3>1.9.2 <span class="latest">Latest</span></h3>
+            <span class="build">Build 15 · November 2026</span>
+          </header>
+          <div class="group">
+            <h4>Changes</h4>
+            <ul>
+              <li><strong>Send a Copy is only words, with everything in them.</strong> Every app that takes words shows them as they are: the title, the day, the time with its time zone (like 6:00 PM PST, for a friend somewhere else), how it repeats, Urgent and the description, for one task or each task in a list. There's no Comet ToDo file any more, since some apps kept the file and dropped the words. To get tasks into a friend's Comet ToDo, share the list live.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="release">
+          <header>
+            <h3>1.9.1</h3>
             <span class="build">Build 14 · November 2026</span>
           </header>
           <div class="group">
@@ -748,13 +762,17 @@
         </div>
         <div class="card" id="send-copy">
           <h3>Share a task or list with a friend</h3>
-          <p>Send a task, or a whole list and its tasks, to anyone. It arrives as a short note they can read anywhere, like "Trip to Boise: Book the hotel, Tue, Dec 1". A small Comet ToDo file comes with it, so a friend with Comet ToDo can add the tasks.</p>
+          <p>Send a task, or a whole list and its tasks, to anyone. It arrives as words they can read in any app, with the day, the time and its time zone, how it repeats, and the description:</p>
+          <pre>Call mom
+Sat, Nov 28, 6:00 PM PST
+Repeats weekly on Saturday
+
+Ask about the trip in March.</pre>
           <ol>
             <li>Open a task and tap <strong>Send a Copy</strong>. For a whole list, tap <strong>Edit lists</strong> at the end of the list chips, then the share button next to the list.</li>
-            <li>Send it any way you like: Messages, Mail, Notes, WhatsApp, AirDrop or Quick Share.</li>
-            <li>To add the tasks, your friend opens the Comet ToDo file that came with it, checks what's in it, and taps <strong>Add</strong>. On an iPhone: tap the file, then Share, then <strong>Comet ToDo</strong>. On Android: open it and choose <strong>Comet ToDo</strong>.</li>
+            <li>Send it any way you like: Messages, Mail, Notes, WhatsApp, Gmail or Copy.</li>
           </ol>
-          <p>It's a copy, so later changes don't sync; to keep a list in step, share it live instead. A list goes into theirs with the same name, or becomes a new one.</p>
+          <p>It's a copy, so later changes don't sync. To have the tasks in your friend's Comet ToDo and keep them in step, share the list live instead.</p>
         </div>
         <div class="card" id="friend-free">
           <h3>See when a friend is free</h3>
